@@ -1,0 +1,31 @@
+{
+    "name": "reed-jones/phase",
+    "version": "v1.0.0",
+    "description": "Transparent Vue <-> Laravel Integration",
+    "type": "library",
+    "license": "ISC",
+    "authors": [
+        {
+            "name": "Reed Jones",
+            "email": "reedjones@reedjones.com"
+        }
+    ],
+    "require": {
+        "vuexcellent/laravel": "^2.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "ReedJones\\Phase\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "ReedJones\\Phase\\PhaseServiceProvider"
+            ],
+            "aliases": {
+                "Phase": "ReedJones\\Phase\\Facades\\Phase"
+            }
+        }
+    }
+}
