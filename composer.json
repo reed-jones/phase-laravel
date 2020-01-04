@@ -1,6 +1,5 @@
 {
     "name": "reed-jones/phase",
-    "version": "v1.0.0",
     "description": "Transparent Vue <-> Laravel Integration",
     "type": "library",
     "license": "ISC",
@@ -10,19 +9,12 @@
             "email": "reedjones@reedjones.com"
         }
     ],
-    "repositories": [
-        {
-            "type": "path",
-            "url": "../PhasePreset/"
-        }
-    ],
     "require": {
         "vuexcellent/laravel": "^2.0",
-        "reed-jones/phase-preset": "dev-master"
+        "reed-jones/phase-preset": "^1.0"
     },
     "require-dev": {
-        "orchestra/testbench": "^4.4",
-        "phpunit/phpunit": "^8.5"
+        "orchestra/testbench": "^4.4"
     },
     "autoload": {
         "psr-4": {
