@@ -5,6 +5,7 @@ namespace ReedJones\Phase\Commands;
 use Illuminate\Console\Command;
 use Illuminate\Routing\Router;
 use Illuminate\Routing\RouteUri;
+use Illuminate\Support\Collection;
 use ReedJones\Phase\Facades\Phase;
 
 class GeneratePhaseRouter extends Command
@@ -19,14 +20,19 @@ class GeneratePhaseRouter extends Command
      * @var string
      */
     protected $signature = 'phase:routes {--json} {--config}';
+
+    /**
+     * @var \Illuminate\Routing\Router
+     */
     protected $router;
+
+    /**
+     * @var array
+     */
     protected $tableHeaders = ['Group Prefix', 'URI', 'Navigation Name', 'Middleware'];
 
     /**
      * Create a new route command instance.
-     *
-     * @param  \Illuminate\Routing\Router  $router
-     * @return void
      */
     public function __construct(Router $router)
     {
@@ -36,22 +42,17 @@ class GeneratePhaseRouter extends Command
 
     /**
      * Hides the command from the php artisan route helper.
-     *
-     * @return void
      */
-    protected function configure()
+    protected function configure(): void
     {
         $this->setHidden(true);
     }
 
     /**
      * Execute the console command.
-     *
-     * @return void
      */
-    public function handle()
+    public function handle(): void
     {
-        // dd($this->getFormattedRoutes());
         if ($this->option('json')) {
             $this->outputJson();
         } else {
@@ -59,7 +60,7 @@ class GeneratePhaseRouter extends Command
         }
     }
 
-    protected function getFormattedRoutes()
+    protected function getFormattedRoutes(): Collection
     {
         return collect(Phase::getRoutes())->map(function ($route) {
             $name = $this->router->getRoutes()->getByAction($route['action']['controller'])->getName()
@@ -74,7 +75,7 @@ class GeneratePhaseRouter extends Command
         })->sortBy('uri')->values();
     }
 
-    protected function outputJson()
+    protected function outputJson(): void
     {
         $routes = $this->getFormattedRoutes();
 
@@ -88,7 +89,7 @@ class GeneratePhaseRouter extends Command
         }
     }
 
-    protected function outputTable()
+    protected function outputTable(): void
     {
         $this->table($this->tableHeaders, $this->getFormattedRoutes());
     }

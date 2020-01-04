@@ -20,9 +20,18 @@
         "vuexcellent/laravel": "^2.0",
         "reed-jones/phase-preset": "dev-master"
     },
+    "require-dev": {
+        "orchestra/testbench": "^4.4",
+        "phpunit/phpunit": "^8.5"
+    },
     "autoload": {
         "psr-4": {
             "ReedJones\\Phase\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "ReedJones\\Phase\\Tests\\": "tests/"
         }
     },
     "extra": {

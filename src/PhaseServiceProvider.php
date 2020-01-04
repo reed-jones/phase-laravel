@@ -15,48 +15,40 @@ class PhaseServiceProvider extends ServiceProvider
 {
     /**
      * Bootstrap services.
-     *
-     * @return void
      */
-    public function boot()
+    public function boot(): void
     {
         // php artisan vendor:publish --provider="ReedJones\Phase\PhaseServiceProvider" --tag="config"
         $this->publishes([__DIR__.'/config.stub.php' => config_path('phase.php')], 'config');
 
         // Route macros Route::phase('/test', 'TestController@testing')
-        $this->setMacros();
+        $this->registerRouterMacro();
 
         // Hidden Route generation command
         $this->registerCommands();
 
         // register custom blade namespace.  allows to specify phase::bladeFile
-        view()->addNamespace('phase', base_path('vendor/reed-jones/phase/src/views'));
+        $this->registerBlades();
 
         // Bind facade
-        App::bind(PhaseFactory::class, function () {
-            return new PhaseFactory;
-        });
+        $this->registerPhaseFacade();
     }
 
     /**
      * Register services.
-     *
-     * @return void
      */
-    public function register()
+    public function register(): void
     {
         $this->mergeConfigFrom(__DIR__.'/config.stub.php', 'phase');
     }
 
     /**
      * Sets up the Route::phase macro.
-     *
-     * @return void
      */
-    public function setMacros()
+    public function registerRouterMacro(): void
     {
         Route::macro('phase', function (...$args) {
-            $route = Route::get(...$args);
+            $route = $this->match(['GET', 'HEAD'], ...$args);
 
             $controller = $route->action['controller'] ?? null;
 
@@ -76,13 +68,23 @@ class PhaseServiceProvider extends ServiceProvider
 
     /**
      * Registers route generation cli command.
-     *
-     * @return void
      */
-    public function registerCommands()
+    public function registerCommands(): void
     {
         if ($this->app->runningInConsole()) {
             $this->commands([GeneratePhaseRouter::class]);
         }
+    }
+
+    public function registerBlades(): void
+    {
+        view()->addNamespace('phase', base_path('vendor/reed-jones/phase/src/views'));
+    }
+
+    public function registerPhaseFacade(): void
+    {
+        App::bind(PhaseFactory::class, function () {
+            return new PhaseFactory;
+        });
     }
 }

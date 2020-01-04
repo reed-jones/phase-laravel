@@ -2,6 +2,9 @@
 
 namespace ReedJones\Phase\Factories;
 
+use Illuminate\Support\Facades\Response;
+use Illuminate\View\View;
+
 class PhaseFactory
 {
     /** @var array $routes */
@@ -40,9 +43,9 @@ class PhaseFactory
      *
      * @param string [$blade=null]
      *
-     * @return \Illuminate\Support\Facades\Response
+     * @return \Illuminate\Http\JsonResponse|\Illuminate\View\View
      */
-    public function view($blade = null)
+    public function view(string $blade = null)
     {
         $blade = $blade ?? config('phase.entry');
 
