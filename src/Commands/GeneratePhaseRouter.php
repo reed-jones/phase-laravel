@@ -3,6 +3,8 @@
 namespace ReedJones\Phase\Commands;
 
 use Illuminate\Console\Command;
+use Illuminate\Routing\Router;
+use Illuminate\Routing\RouteUri;
 use ReedJones\Phase\Facades\Phase;
 
 class GeneratePhaseRouter extends Command
@@ -10,12 +12,30 @@ class GeneratePhaseRouter extends Command
     /**
      * The console command name.
      *
+     * --json => format output as json (as opposed to table view)
+     * --advanced => include advanced details (config etc)
+     *   should output config as json be a command by itself? `php artisan config:show {config_name} --json`
+     *
      * @var string
      */
-    protected $signature = 'phase:routes {--json}';
+    protected $signature = 'phase:routes {--json} {--config}';
+    protected $router;
+    protected $tableHeaders = ['Group Prefix', 'URI', 'Navigation Name', 'Middleware'];
 
     /**
-     * Hides the command from the php artisan route helper
+     * Create a new route command instance.
+     *
+     * @param  \Illuminate\Routing\Router  $router
+     * @return void
+     */
+    public function __construct(Router $router)
+    {
+        parent::__construct();
+        $this->router = $router;
+    }
+
+    /**
+     * Hides the command from the php artisan route helper.
      *
      * @return void
      */
@@ -31,10 +51,45 @@ class GeneratePhaseRouter extends Command
      */
     public function handle()
     {
+        // dd($this->getFormattedRoutes());
         if ($this->option('json')) {
-            $this->line(json_encode(Phase::getRoutes()));
+            $this->outputJson();
         } else {
-            $this->table(['URI', 'Action', 'Middleware'], Phase::getRoutes());
+            $this->outputTable();
         }
+    }
+
+    protected function getFormattedRoutes()
+    {
+        return collect(Phase::getRoutes())->map(function ($route) {
+            $name = $this->router->getRoutes()->getByAction($route['action']['controller'])->getName()
+                ?? str_replace($route['action']['namespace'].'\\', '', $route['action']['controller']);
+
+            return [
+                'prefix' => $route['action']['prefix'],
+                'uri' => $route['uri'],
+                'name' => $name,
+                'middleware' => collect($route['action']['middleware'])->join(','),
+            ];
+        })->sortBy('uri')->values();
+    }
+
+    protected function outputJson()
+    {
+        $routes = $this->getFormattedRoutes();
+
+        if ($this->option('config')) {
+            $this->line(json_encode([
+                'config' => config('phase'),
+                'routes' => $routes,
+            ]));
+        } else {
+            $this->line(json_encode($routes));
+        }
+    }
+
+    protected function outputTable()
+    {
+        $this->table($this->tableHeaders, $this->getFormattedRoutes());
     }
 }

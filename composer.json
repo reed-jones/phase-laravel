@@ -10,12 +10,19 @@
             "email": "reedjones@reedjones.com"
         }
     ],
+    "repositories": [
+        {
+            "type": "path",
+            "url": "../PhasePreset/"
+        }
+    ],
     "require": {
-        "vuexcellent/laravel": "^2.0"
+        "vuexcellent/laravel": "^2.0",
+        "reed-jones/phase-preset": "dev-master"
     },
     "autoload": {
         "psr-4": {
-            "ReedJones\\Phase\\": "src/"
+            "ReedJones\\Phase\\": "src"
         }
     },
     "extra": {

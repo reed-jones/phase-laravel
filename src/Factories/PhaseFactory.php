@@ -8,7 +8,7 @@ class PhaseFactory
     protected $routes = [];
 
     /**
-     * Adds the supplied route to the 'phase' section of the app
+     * Adds the supplied route to the 'phase' section of the app.
      *
      * @param string $uri
      * @param array $action
@@ -20,13 +20,12 @@ class PhaseFactory
         [$uri, $action] = $args;
         array_push($this->routes, [
             'uri' => $uri,
-            'controller' => collect(explode('\\', $action['controller']))->last(),
-            'middleware' => collect($action['middleware'])->join(',')
+            'action' => $action,
         ]);
     }
 
     /**
-     * Gets the currently registered routes
+     * Gets the currently registered routes.
      *
      * @return array
      */
@@ -37,7 +36,7 @@ class PhaseFactory
 
     /**
      * Automatically switches between JSON api response &
-     * Blade views for SPA's
+     * Blade views for SPA's.
      *
      * @param string [$blade=null]
      *

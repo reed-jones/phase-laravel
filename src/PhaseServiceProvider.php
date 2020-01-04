@@ -3,13 +3,13 @@
 namespace ReedJones\Phase;
 
 use Exception;
-use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
 use ReedJones\Phase\Commands\GeneratePhaseRouter;
-use ReedJones\Phase\Factories\PhaseFactory;
 use ReedJones\Phase\Facades\Phase;
+use ReedJones\Phase\Factories\PhaseFactory;
 
 class PhaseServiceProvider extends ServiceProvider
 {
@@ -21,7 +21,7 @@ class PhaseServiceProvider extends ServiceProvider
     public function boot()
     {
         // php artisan vendor:publish --provider="ReedJones\Phase\PhaseServiceProvider" --tag="config"
-        $this->publishes([__DIR__ . '/config.stub.php' => config_path('phase.php')], 'config');
+        $this->publishes([__DIR__.'/config.stub.php' => config_path('phase.php')], 'config');
 
         // Route macros Route::phase('/test', 'TestController@testing')
         $this->setMacros();
@@ -29,7 +29,7 @@ class PhaseServiceProvider extends ServiceProvider
         // Hidden Route generation command
         $this->registerCommands();
 
-        // register custom blade namepsace
+        // register custom blade namespace.  allows to specify phase::bladeFile
         view()->addNamespace('phase', base_path('vendor/reed-jones/phase/src/views'));
 
         // Bind facade
@@ -45,11 +45,11 @@ class PhaseServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->mergeConfigFrom(__DIR__ . '/config.stub.php', 'phase');
+        $this->mergeConfigFrom(__DIR__.'/config.stub.php', 'phase');
     }
 
     /**
-     * Sets up the Route::phase macro
+     * Sets up the Route::phase macro.
      *
      * @return void
      */
@@ -66,8 +66,8 @@ class PhaseServiceProvider extends ServiceProvider
                 Phase::addRoute($route->uri, $route->action);
             } else {
                 throw new Exception("Route::phase is not compatible with closures.\n"
-                    . "Please use the controller@method syntax.\n"
-                    . "Failed on '{$route->uri}' route.");
+                    ."Please use the controller@method syntax.\n"
+                    ."Failed on '{$route->uri}' route.");
             }
 
             return $route;
@@ -75,14 +75,14 @@ class PhaseServiceProvider extends ServiceProvider
     }
 
     /**
-     * Registers route generation cli command
+     * Registers route generation cli command.
      *
      * @return void
      */
     public function registerCommands()
     {
         if ($this->app->runningInConsole()) {
-            $this->commands([ GeneratePhaseRouter::class ]);
+            $this->commands([GeneratePhaseRouter::class]);
         }
     }
 }

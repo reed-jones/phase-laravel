@@ -6,9 +6,16 @@
     <title>{{ config('app.name') }}</title>
     <meta name="csrf-token" content="{{ csrf_token() }}">
     @vuex
+
+    @foreach (config('phase.assets.styles') as $styles)
+    <link rel="stylesheet" type="text/css" href="{{ mix($styles) }}">
+    @endforeach
 </head>
 <body>
     @app
-    <script src="{{ mix('/js/app.js') }}"></script>
+    {{-- Load all required scripts --}}
+    @foreach (config('phase.assets.scripts') as $script)
+    <script src="{{ mix($script) }}"></script>
+    @endforeach
 </body>
 </html>
