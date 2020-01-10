@@ -7,14 +7,14 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     @vuex
 
-    @foreach (config('phase.assets.styles') as $styles)
-    <link rel="stylesheet" type="text/css" href="{{ mix($styles) }}">
+    @foreach (config('phase.assets.sass') as $styles)
+    <link rel="stylesheet" type="text/css" href="{{ mix(str_replace('sass', 'css', str_replace('scss', 'css', $styles))) }}">
     @endforeach
 </head>
 <body>
     @app
     {{-- Load all required scripts --}}
-    @foreach (config('phase.assets.scripts') as $script)
+    @foreach (config('phase.assets.js') as $script)
     <script src="{{ mix($script) }}"></script>
     @endforeach
 </body>

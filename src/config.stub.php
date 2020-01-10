@@ -22,7 +22,7 @@ return [
     // ],
 
     'assets' => [
-        'scripts' => ['js/app.js'],
-        'styles' => ['css/app.css'],
+        'js' => ['js/app.js'],
+        'sass' => ['sass/app.scss'],
     ],
 ];
