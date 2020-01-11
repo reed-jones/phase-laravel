@@ -11,16 +11,37 @@ return [
     */
     'entry' => 'phase::app',
 
-    'unauthorized' => 'Auth.LoginPage',
+    /*
+    |--------------------------------------------------------------------------
+    | Error redirects.
+    |--------------------------------------------------------------------------
+    |
+    | Page redirection for Server side errors
+    */
+    'redirects' => [
+        401 => 'Auth.LoginPage',
+        404 => 'Errors.MissingPage',
+        500 => 'Errors.ServerError'
+    ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Server Side Rendering
+    |--------------------------------------------------------------------------
+    |
+    | https://github.com/spatie/laravel-server-side-rendering
+    */
     'ssr' => false,
-
-    // https://github.com/spatie/laravel-server-side-rendering
     // 'ssr' => [
     //     'client' => 'js/app-client.js',
     //     'server' => 'js/app-server.js'
     // ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Main entry assets
+    |--------------------------------------------------------------------------
+    */
     'assets' => [
         'js' => ['js/app.js'],
         'sass' => ['sass/app.scss'],
